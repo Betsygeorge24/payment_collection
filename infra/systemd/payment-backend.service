@@ -7,7 +7,7 @@ User=ubuntu
 Group=www-data
 WorkingDirectory=/var/www/payment_app/backend
 EnvironmentFile=/var/www/payment_app/backend/.env
-ExecStart=/var/www/payment_app/backend/.venv/bin/gunicorn backend.wsgi:application --bind unix:/run/payment-backend.sock
+ExecStart=/var/www/payment_app/backend/.venv/bin/gunicorn backend.wsgi:application --bind 127.0.0.1:8000
 Restart=always
 
 [Install]

@@ -67,6 +67,12 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
-            cd /var/www/payment_app
+            set -euo pipefail
+            APP_DIR="${{ secrets.EC2_APP_DIR }}"
+            VENV_DIR="${{ secrets.EC2_VENV_DIR }}"
+            if [ -z "$APP_DIR" ]; then
+              APP_DIR="/var/www/payment_app"
+            fi
+            cd "$APP_DIR"
             chmod +x scripts/deploy_ec2.sh
-            ./scripts/deploy_ec2.sh main
+            APP_DIR="$APP_DIR" VENV_DIR="$VENV_DIR" ./scripts/deploy_ec2.sh "${{ github.ref_name }}"

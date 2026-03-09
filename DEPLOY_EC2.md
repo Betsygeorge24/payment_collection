@@ -122,6 +122,8 @@ Set GitHub repository secrets:
 - `EC2_HOST` -> your EC2 public IP or DNS
 - `EC2_USER` -> SSH user (usually `ubuntu`)
 - `EC2_SSH_PRIVATE_KEY` -> private key content for the EC2 key pair
+- `EC2_APP_DIR` -> optional app path on EC2 (for example `/home/ubuntu/payment_collection`)
+- `EC2_VENV_DIR` -> optional backend venv folder name (for example `venv` or `.venv`)
 
 Behavior:
 - On PR/push to `main`: runs CI (Django checks/tests + React build)
@@ -139,4 +141,24 @@ Service logs:
 ```bash
 sudo journalctl -u payment-backend -f
 sudo tail -f /var/log/nginx/error.log
+```
+
+## 9) HTTPS with Let's Encrypt (optional, recommended)
+
+Prerequisites:
+- Domain DNS `A` record points to your EC2 public IP.
+- Nginx site is serving over port `80`.
+
+Install certbot and issue cert:
+
+```bash
+sudo apt update
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+```
+
+Test auto-renew:
+
+```bash
+sudo certbot renew --dry-run
 ```
